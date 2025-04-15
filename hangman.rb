@@ -10,6 +10,7 @@ player_word = "_" * secret_word.length
 file.close
 
 remaining_guesses = 8
+past_guesses = []
 
 puts "Let's play hangman! Can you guess what letters are in my secret word within #{remaining_guesses} tries?"
 puts player_word
@@ -18,13 +19,20 @@ puts ""
 while true do
 
   while true do
-    puts "Guess a letter"
+    puts "Give me a letter"
     player_input = gets.chomp
     puts ""
 
     if player_input.length == 1 && player_input =~ /\A[a-zA-Z]+\z/
       player_input = player_input.downcase
-      break
+
+      if !past_guesses.include?(player_input)
+        break
+      else
+        puts "You've already used that letter. Pick something other than #{past_guesses.join(", ")}"
+      end
+    else
+      puts "You should only give me a single letter of the English alphabet"
     end
   end
 
@@ -53,6 +61,7 @@ while true do
     break
   end
 
+  past_guesses << player_input
   puts "This is your guess so far: #{player_word}"
   puts ""
   puts "You have #{remaining_guesses} #{remaining_guesses > 1 ? "tries" : "try"} remaining"
