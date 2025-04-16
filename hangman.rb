@@ -59,7 +59,7 @@ else
 end
 
 puts "Can you guess what letters are in my secret word within #{remaining_guesses} tries?"
-puts player_word
+puts player_word.chars.join(" ")
 puts ""
 
 while true do
@@ -121,7 +121,7 @@ while true do
   end
 
   past_guesses << player_input
-  puts "This is your guess so far: #{player_word}"
+  puts "This is your guess so far: #{player_word.chars.join(" ")}"
   puts ""
   puts "You have #{remaining_guesses} #{remaining_guesses > 1 ? "tries" : "try"} remaining"
 end
