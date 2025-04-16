@@ -1,18 +1,42 @@
 puts "Welcome to Hangman!"
+puts ""
 
-while true
-  puts "Do you have a file to load? (y/n)"
-  player_answer = gets.chomp.downcase
-  puts ""
+if File.exist?("savegame.dat")
+  has_previous_save = true
+else
+  has_previous_save = false
+end
 
-  if player_answer == "y" || player_answer == "n"
-    previous_save = player_answer == "y" ? true : false
-    break
+if has_previous_save
+   puts "Save file found"
+
+  while true
+    puts "Do you want to load it? (y/n)"
+    player_answer = gets.chomp.downcase
+    puts ""
+
+    if player_answer == "y" || player_answer == "n"
+      should_continue_game = player_answer == "y" ? true : false
+      break
+    end
   end
 end
 
-if previous_save
-  secret_word = "banana"
+if should_continue_game
+  puts "Loading game now..."
+  game_details = nil
+
+  File.open("savegame.dat", "rb") do |file|
+    game_details = Marshal.load(file)
+  end
+
+  secret_word = game_details[:secret_word]
+  past_guesses = game_details[:past_guesses]
+  remaining_guesses = game_details[:remaining_guesses]
+  player_word = game_details[:player_word]
+
+  puts "Load successful"
+  puts ""
 else
   file = File.open("./google-10000-english-no-swears.txt", "r")
 
@@ -24,11 +48,17 @@ else
   file.close
 end
 
-player_word = "_" * secret_word.length
-remaining_guesses = 8
-past_guesses = []
+player_word = player_word ? player_word : "_" * secret_word.length
+remaining_guesses = remaining_guesses ? remaining_guesses : 8
+past_guesses = past_guesses ? past_guesses : []
 
-puts "Let's play a game of hangman! Can you guess what letters are in my secret word within #{remaining_guesses} tries?"
+if should_continue_game
+  puts "Let's play continue your last game of hangman!"
+else
+  puts "Let's play a game of hangman!"
+end
+
+puts "Can you guess what letters are in my secret word within #{remaining_guesses} tries?"
 puts player_word
 puts ""
 
