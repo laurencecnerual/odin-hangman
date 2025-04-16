@@ -34,18 +34,19 @@ puts ""
 
 while true do
   while true do
-    puts "Give me a letter"
-    player_input = gets.chomp
+    puts "Give me a letter (alternatively, type 'save' to save your current progress and exit the game)"
+    player_input = gets.chomp.downcase
     puts ""
 
     if player_input.length == 1 && player_input =~ /\A[a-zA-Z]+\z/
-      player_input = player_input.downcase
-
       if !past_guesses.include?(player_input)
         break
       else
         puts "You've already used that letter. Pick something other than #{past_guesses.join(", ")}"
       end
+    elsif player_input == "save"
+      puts "Understood, I'm saving your progress and exiting now. I'm looking forward to next time"
+      exit
     else
       puts "You should only give me a single letter of the English alphabet"
     end
