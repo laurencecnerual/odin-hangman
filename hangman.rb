@@ -45,7 +45,20 @@ while true do
         puts "You've already used that letter. Pick something other than #{past_guesses.join(", ")}"
       end
     elsif player_input == "save"
-      puts "Understood, I'm saving your progress and exiting now. I'm looking forward to next time"
+      puts "Understood, saving your progress and exiting now..."
+
+      game_details = {
+        secret_word: secret_word,
+        past_guesses: past_guesses,
+        remaining_guesses: remaining_guesses,
+        player_word: player_word
+      }
+
+      File.open("savegame.dat", "wb") do |file|
+        Marshal.dump(game_details, file)
+      end
+      
+      puts "Save successful. Looking forward to next time!"
       exit
     else
       puts "You should only give me a single letter of the English alphabet"
