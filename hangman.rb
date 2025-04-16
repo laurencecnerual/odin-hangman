@@ -1,23 +1,38 @@
-file = File.open("./google-10000-english-no-swears.txt", "r")
+puts "Welcome to Hangman!"
 
-word_candidates = file.readlines().map { |w| w.chomp }.select do |w|
-  w.length >= 5 && w.length <= 12
+while true
+  puts "Do you have a file to load? (y/n)"
+  player_answer = gets.chomp.downcase
+  puts ""
+
+  if player_answer == "y" || player_answer == "n"
+    previous_save = player_answer == "y" ? true : false
+    break
+  end
 end
 
-secret_word = word_candidates.sample
+if previous_save
+  secret_word = "banana"
+else
+  file = File.open("./google-10000-english-no-swears.txt", "r")
+
+  word_candidates = file.readlines().map { |w| w.chomp }.select do |w|
+    w.length >= 5 && w.length <= 12
+  end
+
+  secret_word = word_candidates.sample
+  file.close
+end
+
 player_word = "_" * secret_word.length
-
-file.close
-
 remaining_guesses = 8
 past_guesses = []
 
-puts "Let's play hangman! Can you guess what letters are in my secret word within #{remaining_guesses} tries?"
+puts "Let's play a game of hangman! Can you guess what letters are in my secret word within #{remaining_guesses} tries?"
 puts player_word
 puts ""
 
 while true do
-
   while true do
     puts "Give me a letter"
     player_input = gets.chomp
